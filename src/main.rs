@@ -158,12 +158,12 @@ fn main() -> Result<()> {
     #[cfg(feature = "waveshare_epd")]
     waveshare_epd_hello_world(
         peripherals.spi2,
-        pins.gpio13,
-        pins.gpio14,
+        pins.gpio16,
+        pins.gpio17,
+        pins.gpio22,
+        pins.gpio34,
         pins.gpio15,
-        pins.gpio25,
-        pins.gpio27,
-        pins.gpio26,
+        pins.gpio13,
     )?;
 
     #[cfg(feature = "kaluga")]
@@ -300,6 +300,7 @@ fn main() -> Result<()> {
 
     let mut wait = mutex.0.lock().unwrap();
 
+    /*
     #[cfg(esp32)]
     let mut hall_sensor = peripherals.hall_sensor;
 
@@ -314,6 +315,7 @@ fn main() -> Result<()> {
         peripherals.adc1,
         adc::config::Config::new().calibration(true),
     )?;
+     
 
     #[allow(unused)]
     let cycles = loop {
@@ -337,7 +339,7 @@ fn main() -> Result<()> {
             );
         }
     };
-
+    */
     for s in 0..3 {
         info!("Shutting down in {} secs", 3 - s);
         thread::sleep(Duration::from_secs(1));
@@ -1351,15 +1353,17 @@ impl ili9341::Mode for KalugaOrientation {
     }
 }
 
+// display(GxEPD2_DRIVER_CLASS(/*CS=*/ 22, /*DC=*/ 15, /*RST=*/ 13, /*BUSY=*/ 34));
+
 #[cfg(feature = "waveshare_epd")]
 fn waveshare_epd_hello_world(
     spi: spi::SPI2,
-    sclk: gpio::Gpio13<gpio::Unknown>,
-    sdo: gpio::Gpio14<gpio::Unknown>,
-    cs: gpio::Gpio15<gpio::Unknown>,
-    busy_in: gpio::Gpio25<gpio::Unknown>,
-    dc: gpio::Gpio27<gpio::Unknown>,
-    rst: gpio::Gpio26<gpio::Unknown>,
+    sclk: gpio::Gpio16<gpio::Unknown>,
+    sdo: gpio::Gpio17<gpio::Unknown>,
+    cs: gpio::Gpio22<gpio::Unknown>,
+    busy_in: gpio::Gpio34<gpio::Unknown>,
+    dc: gpio::Gpio15<gpio::Unknown>,
+    rst: gpio::Gpio13<gpio::Unknown>,
 ) -> Result<()> {
     info!("About to initialize Waveshare 4.2 e-paper display");
     let cs = cs.into_output().unwrap();
@@ -1395,6 +1399,8 @@ fn waveshare_epd_hello_world(
     // Display updated frame
     epd.update_frame(&mut my_spi, &display.buffer(), &mut delay::Ets)?;
     epd.display_frame(&mut my_spi, &mut delay::Ets)?;
+
+    info!("Finished setting up Waveshare 4.2 e-paper display");
 
     Ok(())
 }
