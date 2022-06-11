@@ -62,6 +62,7 @@ waveshare_epd = []
 experimental = ["esp-idf-svc/experimental", "esp-idf-hal/experimental", "embedded-svc/experimental"]
 
 [dependencies]
+automerge = { path = "../../automerge-rs/automerge" }
 anyhow = {version = "1", features = ["backtrace"]}
 log = "0.4"
 url = "2"
