@@ -177,23 +177,19 @@ fn main() -> Result<()> {
 
     let mut epd_en = pins.gpio12.into_output().unwrap();
     let mut epd_res = pins.gpio13.into_output().unwrap();
-    let sd_en = pins.gpio5.into_output().unwrap();
-    let batt_en = pins.gpio25.into_output().unwrap();
-    let pcf_int = pins.gpio35.into_input().unwrap();
-	//pcf8574.begin();
-
+    
 	// Power up EPD
-    epd_en.set_low();
-    epd_res.set_low();
+    epd_en.set_low().unwrap();
+    epd_res.set_low().unwrap();
     let fiddy: u8 = 50;
     delay::Ets.delay_ms(fiddy);
-    epd_res.set_high();
+    epd_res.set_high().unwrap();
     delay::Ets.delay_ms(fiddy);
 
     let epd_cs = pins.gpio22.into_output().unwrap();
 
     let mut epd_dc = pins.gpio15.into_output().unwrap();
-    epd_dc.set_high();
+    epd_dc.set_high().unwrap();
 
     let epd_busy = pins.gpio34.into_input().unwrap();
 
